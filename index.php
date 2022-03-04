@@ -1,35 +1,53 @@
-
-<html>
+<html lang="en">
 
 <head>
-    <!-- Primary Meta Tags -->
-    <title>Pygame-Zero In Website</title>
-    <meta name="title" content="Pygame-Zero In Website">
-    <meta name="description" content="Pygame-Zero In Website">
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://magma-mc.net:5000/">
-    <meta property="og:title" content="Pygame-Zero In Website">
-    <meta property="og:description" content="Pygame-Zero In Website">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://magma-mc.net:5000/">
-    <meta property="twitter:title" content="Pygame-Zero In Website">
-    <meta property="twitter:description" content="Pygame-Zero In Website">
+    <title>MagmaMc - pgzero online</title>
+    <meta name="author" content="MagmMc">
+    <meta name="description" content="Runs python code online">
+    <meta name="keywords" content="Skulpt, pygame, pyzero, online, pygame-zero">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🌐 MagmaMc - pgzero online">
+    <meta name="twitter:description" content="Runs python code online">
+    <meta name="twitter:site" content="@SMLkaiellis">
+    <meta name="twitter:creator" content="@SMLkaiellis">
+    <meta name="twitter:image" content="./logo.gif">
+
+    <meta property="og:title" content="🌐 MagmaMc - pgzero online">
+    <meta property="og:description" content="Runs python code online">
+    <meta property="og:url" content="https://magma-mc.net:5000/">
+    <meta property="og:site_name" content="magma-mc.net">
+    <meta property="og:type" content="website">
+    <meta content="#306998" data-react-helmet="true" name="theme-color">
+    <meta property="og:image" content="./logo.gif">
+
+    <meta property="fb:app_id" content="100075697834863">
 
     <!-- Import -->
-    <script src="./Base/Skulpt/skulpt.min.js" type="text/javascript"></script>
-    <script src="./Base/Skulpt/skulpt-stdlib.js" type="text/javascript"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2295738695724894" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="./Base/main.js"></script>
+    <script src="./Base/Skulpt/skulpt.min.js" type="text/javascript"></script>
+    <script src="./Base/Skulpt/skulpt-stdlib.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js" type="text/javascript"></script>
+    <script src="./Base/main.js" type="text/javascript"></script>
+
 </head>
+<script type="text/javascript">
 <?php
 if(isset($_GET["ID"])){
-	setcookie("ID", $_GET["ID"]);
+    ?>
+        id =  new URLSearchParams(window.location.search).get('ID')
+        Cookies.set("ID", id)
+        if(Cookies.get("ID") !== id) {
+            location.reload()
+        }
+    <?php
 	if(!is_dir("Share/".$_GET["ID"])){
 		mkdir("Share/".$_GET["ID"], 0777, true);
 		mkdir("Share/".$_GET["ID"]."/images", 0777, true);
@@ -39,14 +57,16 @@ if(isset($_GET["ID"])){
 		fwrite($mainfile, fread($myfile,filesize("Base/default.py")));
 		fclose($mainfile);
 		fclose($myfile);
+        echo 'Location.reload()';
 	}
 	
 } else {
 	?>
-		window.location.href = "?ID="+$_COOKIE["UserID"];
+		window.location.href = "?ID="+Cookies.get("UserID");
 	<?php
 }
 ?>
+</script>
 <body id="main" style="background: #1c1c1c; color: white; text-align: center;">
     <div>
         <header>
@@ -84,392 +104,28 @@ if(isset($_GET["ID"])){
     </div>
     <div class="col-md-2"></div>
     <div id="backdrop"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-
-        function removeElementsByClass(className) {
-            const elements = document.getElementsByClassName(className);
-            while (elements.length > 0) {
-                elements[0].parentNode.removeChild(elements[0]);
-            }
-        }
-
-        function removeElementsById(IdName) {
-            const elements = document.getElementById(IdName);
-            while (elements.length > 0) {
-                elements[0].parentNode.removeChild(elements[0]);
-            }
-        }
-
-        function close_force() {
-            document.getElementById("main").className = ""
-            document.getElementById("mycanvas").innerHTML = ""
-            removeElementsByClass("modal-backdrop in")
-        }
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/twilight");
-        editor.session.setMode("ace/mode/python");
-    </script>
-
-
-    <script>
-        document.getElementById("editor").style['height'] = 0.6 * window.innerHeight;
-        document.getElementById("editor").style['margin'] = "0 auto";
-        document.getElementById("output").style['height'] = 0.4 * window.innerHeight;
-    </script>
-    <script>
-        var basePath = './Modules/Pygame/';
-        Sk.externalLibraries = {
-            'Cookies': {
-                path: './Modules/Cookies.js',
-            },
-            'JsForPy': {
-                path: './Modules/JsForPy.js',
-            },
-            'Sounds': {
-                path: './Modules/Sounds.js',
-            },
-            'json': {
-                path: './Modules/Json/Json.js',
-                dependencies: [
-                    './Modules/Json/Stringify.js'
-                ]
-            },
-            'pygame': {
-                path: basePath + 'pygame.js',
-            },
-            'pygame.display': {
-                path: basePath + 'display.js',
-            },
-            'pygame.draw': {
-                path: basePath + 'draw.js',
-            },
-            'pygame.event': {
-                path: basePath + 'event.js',
-            },
-            'pygame.font': {
-                path: basePath + 'font.js',
-            },
-            'pygame.image': {
-                path: basePath + 'image.js',
-            },
-            'pygame.key': {
-                path: basePath + 'key.js',
-            },
-            'pygame.mouse': {
-                path: basePath + 'mouse.js',
-            },
-            'pygame.time': {
-                path: basePath + 'time.js',
-            },
-            'pygame.transform': {
-                path: basePath + 'transform.js',
-            },
-            'pygame.version': {
-                path: basePath + 'version.js',
-            },
-        };
-
-        function resetTarget() {
-            var selector = Sk.TurtleGraphics.target;
-            var target = typeof selector === "string" ? document.getElementById(selector) : selector;
-            // clear canvas container
-            while (target.firstChild) {
-                target.removeChild(target.firstChild);
-            }
-            return target;
-        }
-
-        function createArrows(div) {
-            var arrows = new Array(4);
-            var direction = ["left", "right", "up", "down"];
-            $(div).addClass("d-flex justify-content-center");
-            for (var i = 0; i < 4; i++) {
-                arrows[i] = document.createElement("span");
-                div.appendChild(arrows[i]);
-                $(arrows[i]).addClass("btn btn-primary btn-arrow");
-                var ic = document.createElement("i");
-                $(ic).addClass("fas fa-arrow-" + direction[i]);
-                arrows[i].appendChild(ic);
-            }
-
-
-            var swapIcon = function(id) {
-                $(arrows[id].firstChild).removeClass("fa-arrow-" + direction[id]).addClass("fa-arrow-circle-" + direction[id]);
-            }
-
-            var returnIcon = function(id) {
-                $(arrows[id].firstChild).removeClass("fa-arrow-circle-" + direction[id]).addClass("fa-arrow-" + direction[id]);
-            }
-
-            $(arrows[0]).on('mousedown', function() {
-                Sk.insertEvent("left");
-                swapIcon(0);
-            });
-            $(arrows[0]).on('mouseup', function() {
-                returnIcon(0);
-            });
-            $(arrows[1]).on('mousedown', function() {
-                Sk.insertEvent("right");
-                swapIcon(1);
-            });
-            $(arrows[1]).on('mouseup', function() {
-                returnIcon(1);
-            });
-            $(arrows[2]).on('mousedown', function() {
-                Sk.insertEvent("up");
-                swapIcon(2);
-            });
-            $(arrows[2]).on('mouseup', function() {
-                returnIcon(2);
-            });
-            $(arrows[3]).on('mousedown', function() {
-                Sk.insertEvent("down");
-                swapIcon(3);
-            });
-            $(arrows[3]).on('mouseup', function() {
-                returnIcon(3);
-            });
-
-            $(document).keydown(function(e) {
-                switch (e.which) {
-                    case 37:
-                        swapIcon(0);
-                        break;
-                    case 38:
-                        swapIcon(2);
-                        break;
-                    case 39:
-                        swapIcon(1);
-                        break;
-                    case 40:
-                        swapIcon(3);
-                        break;
-                }
-            });
-
-            $(document).keyup(function(e) {
-                switch (e.which) {
-                    case 37:
-                        returnIcon(0);
-                        break;
-                    case 38:
-                        returnIcon(2);
-                        break;
-                    case 39:
-                        returnIcon(1);
-                        break;
-                    case 40:
-                        returnIcon(3);
-                        break;
-                }
-            });
-        };
-
-        function printString(text) {
-            var output = document.getElementById("output");
-            text = text.replace(/</g, '&lt;');
-            output.innerHTML = output.innerHTML + text;
-        }
-
-        function clearOutput() {
-            var output = document.getElementById("output");
-            output.innerHTML = '';
-        }
-
-        function builtinRead(x) {
-            if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-                throw "File not found: '" + x + "'";
-            return Sk.builtinFiles["files"][x];
-        }
-
-        function addModal() {
-            $(Sk.main_canvas).css("border", "2px solid #0e0e0e");
-            $(Sk.main_canvas).css("background", "#191919");
-            var currentTarget = resetTarget();
-
-            var div1 = document.createElement("div");
-            currentTarget.appendChild(div1);
-            $(div1).addClass("modal");
-            $(div1).css("text-align", "center");
-
-            var btn1 = document.createElement("span");
-            $(btn1).addClass("btn btn-primary btn-sm pull-right");
-            var ic = document.createElement("i");
-            $(ic).addClass("fas fa-times");
-            btn1.appendChild(ic);
-
-            $(btn1).on('click', function(e) {
-                Sk.insertEvent("quit");
-            });
-
-            var div2 = document.createElement("div");
-            $(div2).addClass("modal-dialog modal-lg");
-            $(div2).css("display", "inline-block");
-            $(div2).width(self.width + 42);
-            $(div2).attr("role", "document");
-            div1.appendChild(div2);
-
-            var div3 = document.createElement("div");
-            $(div3).addClass("modal-content");
-            $(div3).css("background", "#191919");
-            div2.appendChild(div3);
-
-            var div4 = document.createElement("div");
-            $(div4).addClass("modal-header d-flex justify-content-between");
-            $(div4).css("border-color", "#151515");
-            var div5 = document.createElement("div");
-            $(div5).addClass("modal-body");
-            var div6 = document.createElement("div");
-            $(div6).addClass("modal-footer");
-            $(div6).css("border-color", "#151515");
-            var div7 = document.createElement("div");
-            $(div7).addClass("col-md-8");
-            var div8 = document.createElement("div");
-            $(div8).addClass("col-md-4");
-            var header = document.createElement("h5");
-            Sk.title_container = header;
-            $(header).addClass("modal-title");
-
-
-            div3.appendChild(div4);
-            div3.appendChild(div5);
-            div3.appendChild(div6);
-
-            div4.appendChild(header);
-            div4.appendChild(btn1);
-            // div7.appendChild(header);
-            // div8.appendChild(btn1);
-
-            div5.appendChild(Sk.main_canvas);
-
-            createArrows(div6);
-            $(div1).modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        }
-
-        function outf(text) {
-            var output = document.getElementById("output");
-            text = text.replace(/</g, '&lt;');
-            output.innerHTML = output.innerHTML + text;
-        }
-
-        function download() {
-			<?php
-			download();
-			?>
-            window.location.href = "Zip/"+Cookies.get("ID")+".zip"
-        }
-
-        function runCode() {
-            var output = document.getElementById("output");
-            output.innerHTML = '';
-            Sk.configure({
-                output: outf
-            });
-            Sk.main_canvas = document.createElement("canvas");
-            Sk.quitHandler = function() {
-                $('.modal').modal('hide');
-            };
-            addModal();
-
-            function top() {
-                return $.ajax({
-                    type: "GET",
-                    url: "./Base/Mapper_Top.py",
-                    async: false
-                }).responseText;
-            }
-
-            function low() {
-                return $.ajax({
-                    type: "GET",
-                    url: "./Base/Mapper_Bottom.py",
-                    async: false
-                }).responseText;
-            }
-            var prog = editor.getValue();
-            Cookies.set("code", prog)
-            Sk.misceval.asyncToPromise(function() {
-                try {
-					<?php
-					    if(strpos($_COOKIE["code"], "#import pgzrun") !== false) {
-							echo 'return Sk.importMainWithBody("<stdin>", false, top() + prog + low(), true);';
-						} else {
-							echo 'return Sk.importMainWithBody("<stdin>", false, prog, true);';
-						}
-						?>
-                } catch (e) {
-					<?php
-					if(strpos($_COOKIE["code"], "#import pgzrun") !== false) {
-					
-                    echo "e.traceback[0].lineno -= 1849";
-					}
-					?>
-                    alert(e)
-                    location.reload();
-
-                }
-            })
-
-        }
-
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-        Sk.configure({
-            read: builtinRead,
-            output: printString
-        });
-        $("#runbutton").click(function() {
-            runCode();
-            <?php
-            runItb();
-            ?>
-        });
-        try {
-            Cookies.set("ID", new URLSearchParams(window.location.search).get('ID'))
-            editor.setValue($.ajax({type: "GET", url: "Share/"+ new URLSearchParams(window.location.search).get('ID')+"/main.py",async: false}).responseText);
-        } catch(err){
-            alert(err)
-        }
-        Cookies.set("code",editor.getValue());
-
-        setInterval(function(){ 
-            <?php
-            runItb();
-            ?>
-        }, 10000);
-        
-    </script>
+    
+    <?php
+    include 'mainjs.php';
+    ?>
 </body>
 
 </html>
-<?php
+<script async type="text/javascript">
+    function savecode() {
+        var data = new FormData();
+        data.append("data" , editor.getValue());
+        data.append("ID" , Cookies.get('ID'));
+        var xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new activeXObject("Microsoft.XMLHTTP");
+        xhr.open( 'post', 'write.php', true );
+        xhr.send(data);
 
-function runItb() {
-?>
-    var code = editor.getValue()
-    Cookies.set("code",code);
+        setTimeout(savecode, 4000);
+    }
 
-<?php
-    $myfile = fopen("Share/".$_COOKIE["ID"]."/main.py", "c+") or die("file error");
-    fwrite($myfile, $_COOKIE["code"]);
-    fclose($myfile);
-?>
-console.log(code);
-<?php
-
-}
-
-
-?>
+savecode();
+</script>
 <?php 
-function console($b) {
-?>
-	console.log("<?php echo $b; ?>")
-<?php
-}
 // Create ZIP file
 
 function download() {
@@ -483,24 +139,19 @@ function download() {
 	
 	// Create zip
 	createZip($zip,$dir);
-	console("aaa");
 	$zip->close();
 }
-
-
 // Create zip
 function createZip($zip,$dir){
     if (is_dir($dir)){
 
         if ($dh = opendir($dir)){
             while (($file = readdir($dh)) !== false){
-                console("$file");
                 // If file
                 if (is_file($dir.$file)) {
                     if($file != '' && $file != '.' && $file != '..'){
                         
                         $zip->addFile($dir.$file);
-						console("Addfile $dir $file");
                     }
                 }else{
                     // If directory
@@ -510,10 +161,7 @@ function createZip($zip,$dir){
 
                             // Add empty directory
                             $zip->addEmptyDir($dir.$file);
-							console("addempty dir $dir $file");
                             $folder = $dir.$file.'/';
-								
-							console("folder $dir $file /");
                             
                             // Read data of the folder
                             createZip($zip,$folder);
