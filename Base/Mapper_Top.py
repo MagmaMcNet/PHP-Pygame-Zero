@@ -3,6 +3,7 @@ import time
 from math import radians, sin, cos, atan2, degrees, sqrt, ceil, pi
 import JsForPy as js
 import Cookies
+import Sounds
 ANCHORS = {
     'x': {
         'left': 0.0,
@@ -55,6 +56,53 @@ KEYS_MOUSE = {
     'WHEEL_DOWN': 5
 }
 
+INTKEYS = {
+    8: '',
+    13: '',
+    46: '',
+    187: '',
+    188: '',
+    189: '-',
+    32: ' ',
+    48:'0',
+    49:'1',
+    50:'2',
+    51:'3',
+    52:'4',
+    53:'5',
+    54:'6',
+    55:'7',
+    56:'8',
+    57:'9',
+    97 :'A',
+    98 :'B',
+    99 :'C',
+    100:'D',
+    101:'E',
+    102:'F',
+    103:'G',
+    104:'H',
+    105:'I',
+    106:'J', 
+    107:'K',
+    108:'L', 
+    109:'M', 
+    110:'N',
+    111:'O', 
+    112:'P', 
+    113:'Q',
+    114:'R',
+    115:'S', 
+    116:'T',
+    117:'U',
+    118:'V', 
+    119:'W',
+    120:'X',
+    121:'Y',
+    122:'Z',
+    109:'-',
+}
+
 KEYS = {
     'UNKNOWN': 0,
     'BACKSPACE': 8,
@@ -71,35 +119,58 @@ KEYS = {
     'K_7': 55,
     'K_8': 56,
     'K_9': 57,
-    'SEMICOLON': 59,
-    'EQUALS': 61,
-    'LEFTBRACKET': 91,
-    'BACKSLASH': 92,
-    'RIGHTBRACKET': 93,
-    'BACKQUOTE': 96,
-    'A': 65,
-    'B': 66,
-    'C': 67,
-    'D': 68,
-    'E': 69,
-    'F': 70,
-    'G': 71,
-    'H': 72,
-    'I': 73, 'J': 74, 'K': 75,
-    'L': 76, 'M': 77, 'N': 78,
-    'O': 79, 'P': 80, 'Q': 81,
-    'R': 82, 'S': 83, 'T': 84,
-    'U': 85, 'V': 86, 'W': 87,
-    'X': 88, 'Y': 89, 'Z': 90,
-    'DELETE': 127, 'KP_0': 96,
-    'KP_1': 97, 'KP_2': 98,
-    'KP_3': 99, 'KP_4': 100,
-    'KP_5': 101, 'KP_6': 102,
-    'KP_7': 103, 'KP_8': 104,
-    'KP_9': 105, 'KP_PERIOD': 110,
-    'KP_DIVIDE': 111, 'KP_MULTIPLY': 106,
-    'KP_MINUS': 109, 'KP_PLUS': 107,
-    'UP': 273, 'DOWN': 274, 'RIGHT': 275, 'LEFT': 276,
+    'SEMICOLON': 186,
+    'EQUALS': 187,
+    'LEFTBRACKET': 57,
+    'BACKSLASH': 220,
+    'RIGHTBRACKET': 48,
+    'BACKQUOTE': 223,
+    'A': 97,
+    'B': 98,
+    'C': 99,
+    'D': 100,
+    'E': 101,
+    'F': 102,
+    'G': 103,
+    'H': 104,
+    'I': 105,
+    'J': 106, 
+    'K': 107,
+    'L': 108, 
+    'M': 109, 
+    'N': 110,
+    'O': 111, 
+    'P': 112, 
+    'Q': 113,
+    'R': 114,
+    'S': 115, 
+    'T': 116,
+    'U': 117,
+    'V': 118, 
+    'W': 119,
+    'X': 120,
+    'Y': 121,
+    'Z': 122,
+    'DELETE': 46,
+    'KP_0': 96,
+    'KP_1': 97,
+    'KP_2': 98,
+    'KP_3': 99,
+    'KP_4': 100,
+    'KP_5': 101,
+    'KP_6': 102,
+    'KP_7': 103,
+    'KP_8': 104,
+    'KP_9': 105,
+    'KP_PERIOD': 110,
+    'KP_DIVIDE': 111,
+    'KP_MULTIPLY': 106,
+    'KP_MINUS': 109,
+    'KP_PLUS': 107,
+    'UP': 273,
+    'DOWN': 274,
+    'RIGHT': 275,
+    'LEFT': 276,
     'INSERT': 45, 'HOME': 36, 'END': 35,
     'PAGEUP': 33, 'PAGEDOWN': 34, 'F1': 112,
     'F2': 113, 'F3': 114, 'F4': 115, 'F5': 116,
@@ -314,11 +385,12 @@ def getfont(fontname=None, fontsize=None, sysfontname=None,
         if fontname is not None:
             fontname = FONT_NAME_TEMPLATE % fontname
         try:
+            pygame.font.init()
             font = pygame.font.Font(fontname, fontsize)
         except IOError:
             raise IOError("unable to read font filename: %s" % fontname)
     if bold is not None:
-        font.set_bold(bold)
+        font.set_bold(bold) 
     if italic is not None:
         font.set_italic(italic)
     if underline is not None:
@@ -729,7 +801,7 @@ class Keys:
         return key
 
 
-class Mouse:
+class Mouse_:
 
     def __getattr__(self, kname):
         try:
@@ -1511,6 +1583,44 @@ class Actor:
         del self._surface_cache[:]  # Clear out old image's cache.
         self._update_pos()
 
+    @property
+    def sprite(self):
+        return self._image_name
+
+    def sprite_init(self, sprite_image, pixels, width, height):
+        self._sprite = sprite_image
+        self._sprite_pixel = pixels
+        self._sprite_width = width
+        self._sprite_height = height
+    def sprite_loads(self, spritesetting):
+        x, y, scale, name = spritesetting
+        pixels = self._sprite_pixel
+        width = self._sprite_width
+        height = self._sprite_height
+        pixel_x, pixel_y = pixels
+        image = pygame.Surface((width, height)).convert_alpha()
+        image.blit(images.load("images/"+self._sprite), (-(x*pixel_x), -(y*pixel_y)), (width, height, width, height))
+        image = pygame.transform.scale(image, (width * scale, height * scale))
+        self._image_name = name
+        self._orig_surf = image
+        del self._surface_cache[:]  # Clear out old image's cache.
+        self._update_pos()
+
+    def sprite_load(self, spritesetting):
+        sheet, pixels, x, y, width, height, scale, name = spritesetting
+        pixel_x, pixel_y = pixels
+        image = pygame.Surface((width, height)).convert_alpha()
+        image.blit(images.load("images/"+sheet), (-(x*pixel_x), -(y*pixel_y)), (width, height, width, height))
+        image = pygame.transform.scale(image, (width * scale, height * scale))
+        self._image_name = name
+        self._orig_surf = image
+        del self._surface_cache[:]  # Clear out old image's cache.
+        self._update_pos()
+
+    def scale(self, x, y):
+        self._orig_surf = pygame.transform.scale(self._orig_surf, (x, y))
+        self._update_pos()
+    
     def _update_pos(self):
         p = self.pos
         self.width, self.height = list(map(int, self._orig_surf.get_size()))
@@ -1785,23 +1895,6 @@ def on_key_down(key):
 def on_key_up(key):
     pass
 
-# ============================================== SOUND LOADER ===============================================================
-class SoundLoader:
-    EXTNS = ['wav', 'ogg', 'oga']
-    TYPE = 'sound'
-
-    def _load(self, name):
-        res = None
-        for ext in self.EXTNS:
-            path = "sounds//" + name + '.' + ext
-            try:
-                res = pygame.mixer.Sound("sounds//coin.wav").play()
-                break
-            except:
-                pass
-
-
-
 
 # ============================================== GLOBAL VARIABLES ===========================================================
 # Helpers
@@ -1809,7 +1902,7 @@ heapq = HeapqPartial()
 RECT_CLASSES = (pygame.Rect, ZRect)
 
 # Клавиатуа + мышка
-mouse = Mouse()
+mouse = Mouse_()
 keyboard = Keyboard()
 keys = Keys()
 
@@ -1836,8 +1929,13 @@ each_tick = clock.each_tick
 
 _font_cache = {}
 
-FPS = 10 #чтобы даже слабые компьютеры тянули
+FPS = 15
 TITLE = 'UNTITLED'
+display_FPS = 30
+add_Current_FPS = 0
+WIDTH = 500
+HEIGHT = 300
+
 # Анимация
 TWEEN_FUNCTIONS = {
     'linear': linear,
@@ -1851,3 +1949,36 @@ TWEEN_FUNCTIONS = {
     'bounce_start': bounce_start,
     'bounce_start_end': bounce_start_end
 }
+
+# 
+
+def Update_fps():
+    global add_Current_FPS
+    global display_FPS
+    display_FPS = str(add_Current_FPS)
+    add_Current_FPS = 0
+
+class Custom_Modules:
+    
+    class Mouse:
+        def __getattr__(self, keyname):
+            if keyname.upper() == "LEFT":
+                return pygame.mouse.get_pressed()[0]
+            if keyname.upper() == "MIDDLE":
+                return pygame.mouse.get_pressed()[1]
+            if keyname.upper() == "RIGHT":
+                return pygame.mouse.get_pressed()[2]
+    class Fps_mod:
+        def __getattr__(self, keyname):
+            
+            global add_Current_FPS
+            global display_FPS
+            if keyname.upper() == "INIT":
+                clock.schedule_interval(Update_fps, 1)
+            elif keyname.upper() == "UPDATE":
+                add_Current_FPS += 1
+            elif keyname.upper() == "DISPLAY":
+                return display_FPS
+#
+FPS_Modules = Custom_Modules.Fps_mod()
+Mouse = Custom_Modules.Mouse()
