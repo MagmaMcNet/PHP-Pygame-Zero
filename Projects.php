@@ -1,3 +1,13 @@
+<?php
+
+require_once 'MagmaMc.UAS.PHP/MagmaMc.UAS.php';
+
+if (!isset($_COOKIE["Token"]))
+    UserData->Login("http://python.magma-mc.net/MagmaMc.UAS.PHP/HandleLogin.php");
+if (!(UserData->VaildToken($_COOKIE["Token"])))
+    UserData->Login("http://python.magma-mc.net/MagmaMc.UAS.PHP/HandleLogin.php");
+
+    ?>
 <!DOCTYPE html>
 <html lang="en" encoding="UTF-8" >
         <head>
@@ -29,7 +39,6 @@
 
         <!-- Import -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -63,13 +72,6 @@
     </header>               
 </body>
 <?php
-require_once 'MagmaMc.UAS.PHP/MagmaMc.UAS.php';
-
-if (empty($_COOKIE["Token"]))
-    UserData->Login("http://localhost:3000/MagmaMc.UAS.PHP/HandleLogin.php");
-if (!(UserData->VaildToken($_COOKIE["Token"])))
-    UserData->Login("http://localhost:3000/MagmaMc.UAS.PHP/HandleLogin.php");
-
 
 $a = array("primary", "danger", "success", "warning", "info", "secondary
 

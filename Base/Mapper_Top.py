@@ -347,7 +347,7 @@ class ImageLoader:
         res = None
         for ext in self.EXTNS:
 			
-            path = '/../../Share/' + str(Cookies.get("ID")) + "/" + name + '.' + ext
+            path = '../../Share/' + str(Cookies.get("Project")) + "/" + name + '.' + ext
             js.console.log(path)
             try:
                 res = pygame.image.load(path).convert_alpha()

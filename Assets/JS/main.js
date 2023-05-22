@@ -16,6 +16,13 @@ function removeElementsById(IdName) {
 		elements[0].parentNode.removeChild(elements[0]);
 	}
 }
+function getLineCount(str) {
+	// Split the string by line breaks and count the number of resulting lines
+	var lines = str.split("\n");
+	return lines.length;
+  }
+  
+  
 function GetPgzeroTop() 
 {
 	return $.ajax({

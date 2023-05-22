@@ -160,14 +160,26 @@
 
         <?php echo file_get_contents("Assets/JS/CreateRunScreen.js"); ?>
 
-setInterval(function()
-{
+var typingTimer; // Timer identifier
+var doneTypingInterval = 500; // Time in milliseconds (2 seconds)
+
+// Event listener for keyup event in the Ace editor
+editor.getSession().on('change', function() {
+    clearTimeout(typingTimer); // Clear the previous timer
+
+    // Set a new timer to save the data after 2 seconds of inactivity
+    typingTimer = setTimeout(saveData, doneTypingInterval);
+});
+
+// Function to save the data
+function saveData() {
     $.ajax({
-		type: "GET",
-		url: "SaveData.php?Token="+Cookies.get("Token")+"&Project="+UserID+"&Data="+encodeURIComponent(editor.getValue()),
-		async: false
-	});
-}, 2000);
+        type: "GET",
+        url: "SaveData.php?Token=" + Cookies.get("Token") + "&Project=" + UserID + "&Data=" + encodeURIComponent(editor.getValue()),
+        async: true // Set async to true to prevent pausing the Ace editor
+    });
+}
+
 
 function runCode() {
     Console.Clear();
@@ -196,14 +208,16 @@ function runCode() {
             $CustomModulesLength = 0;
         echo 'return `';
         try {
-            $folder = "./Share/".$_REQUEST["ID"]."/files/";
-            if (is_dir($folder)){
-            $scanned_directory = array_diff(scandir($folder), array('..', '.'));
-            foreach($scanned_directory as $filename){
-                echo file_get_contents($folder.$filename)."\n";
-                $CustomModulesLength += count(file($folder.$filename));
+            $folder = "./Share/".$_COOKIE["Project"]."/files/";
+            if (is_dir($folder))
+            {
+                $scanned_directory = array_diff(scandir($folder), array('..', '.'));
+                foreach($scanned_directory as $filename)
+                {
+                    echo "\n".file_get_contents($folder.$filename)."\n";
+                    $CustomModulesLength += count(file($folder.$filename));
+                }
             }
-        }
         } catch(Exception) {}
         echo '`';
         ?>
@@ -211,9 +225,9 @@ function runCode() {
 
     Sk.misceval.asyncToPromise(function() {
         try {
-            return Sk.importMainWithBody("<stdin>", false, GetPgzeroTop() + editor.getValue() + GetPgzeroBottom(), true);
+            return Sk.importMainWithBody("<stdin>", false, GetPgzeroTop() + GetCustomModules() + editor.getValue() + GetPgzeroBottom(), true);
         } catch (e) {
-            e.traceback[0].lineno -= 1854 + <?php echo $CustomModulesLength ?>;
+            e.traceback[0].lineno -= (1854 + <?php echo $CustomModulesLength ?>);
             console.log(e)
             alert(e)
             setTimeout(function(){location.reload(true)}, 1000);

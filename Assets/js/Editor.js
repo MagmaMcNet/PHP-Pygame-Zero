@@ -35,11 +35,11 @@ function EditorAutoSize()
 {
     
     editor.setOptions({
-    enableSnippets: true,
-    enableBasicAutocompletion: true,
-    enableLiveAutocompletion: true,
-    showPrintMargin: false,
-    wrap: true
+        enableSnippets: true,
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        showPrintMargin: false,
+        wrap: true
     });
     document.getElementById("editor").style['height'] = 0.75 * window.innerHeight;
     document.getElementById("editor").style['width'] = 0.55 * window.innerWidth;

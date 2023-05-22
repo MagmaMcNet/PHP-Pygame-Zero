@@ -125,7 +125,10 @@ function CreateRunScreen() {
     Screen.appendChild(div9);
     Screen.appendChild(GameWindow);
 
-
+    $(GameWindow).css({
+    display: "flex",
+    justifyContent: "center"
+    });
     
     //div7.appendChild(header);
     //div8.appendChild(btn1);
