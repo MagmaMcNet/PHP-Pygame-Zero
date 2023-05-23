@@ -35,8 +35,8 @@ function CreateRunScreen() {
 
     $(ExitButton).on('click', function(){
         
-        if(isloaded == true) {
-            isloaded = false;
+        if(PGZero == true) {
+            PGZero = false;
             audio_stopall();
             Sk.insertEvent("quit")
         } else {

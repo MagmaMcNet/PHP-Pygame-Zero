@@ -1,4 +1,4 @@
-var isloaded = true;
+var PGZero = true;
 var $builtinmodule = function(name) {
     var pgzero = {};
 

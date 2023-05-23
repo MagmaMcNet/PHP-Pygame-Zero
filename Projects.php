@@ -2,12 +2,9 @@
 
 require_once 'MagmaMc.UAS.PHP/MagmaMc.UAS.php';
 
-if (!isset($_COOKIE["Token"]))
-    UserData->Login("http://python.magma-mc.net/MagmaMc.UAS.PHP/HandleLogin.php");
-if (!(UserData->VaildToken($_COOKIE["Token"])))
-    UserData->Login("http://python.magma-mc.net/MagmaMc.UAS.PHP/HandleLogin.php");
+UserData->Login("http://".$_SERVER['HTTP_HOST']."/MagmaMc.UAS.PHP/HandleLogin.php");
 
-    ?>
+?>
 <!DOCTYPE html>
 <html lang="en" encoding="UTF-8" >
         <head>
@@ -53,12 +50,12 @@ if (!(UserData->VaildToken($_COOKIE["Token"])))
 
     <script>
         function CreateProject(prompt){
-            b = window.prompt(prompt)
-            if (b !== null) {
-                if (b.length >= 5) {
+            prompt = window.prompt(prompt)
+            if (prompt !== null) {
+                if (prompt.length >= 5)
                     window.parent.location.href = "../CreateProject.php?Project="+b+"&Token="+Cookies.get("Token");
 
-                }else {
+                else {
                     alert("Project Name Needs to be Atleast 5 characters");
                     CreateProject(prompt)
                 }

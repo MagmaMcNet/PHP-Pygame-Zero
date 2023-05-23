@@ -2,12 +2,29 @@
 <script src="../Assets/JS/main.js" type="text/javascript"></script>
 <?php
 require_once 'MagmaMc.UAS.PHP/MagmaMc.UAS.php';
-$Folder = "Share/".$_REQUEST["Project"]."/";
 
-if (is_dir($Folder) | !UserData->VaildToken($_REQUEST["Token"]))
+if (!isset($_REQUEST["Project"]) | !isset($_REQUEST["Token"]))
 {
     http_response_code(400);
-    echo "400: bad request";
+    echo "400: Bad Request";
+    exit();
+}
+
+$Folder = "Share/".$_REQUEST["Project"]."/";
+
+if (is_dir($Folder))
+{
+    http_response_code(400);
+    echo "400: Project Already Exists";
+    echo "</br><button onclick=\"history.back()\">Back</button>";
+    exit();
+    
+}
+if (!UserData->VaildToken($_REQUEST["Token"]))
+{
+    http_response_code(400);
+    echo "401: bad Token";
+    echo "</br><button onclick=\"history.back()\">Back</button>";
     exit();
 }
 

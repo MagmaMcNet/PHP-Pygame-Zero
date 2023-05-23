@@ -46,21 +46,23 @@ function EditorAutoSize()
     document.getElementById("editor").style['margin'] = "0 auto";
     document.getElementById("output").style['height'] = 0.4 * window.innerHeight;
     document.getElementById("output").style['width'] = 0.45 * window.innerWidth;
+
+    
 }
 var editor = "";
 if (document.getElementById("editor") !== null)
 {
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
-    editor.session.setMode("ace/mode/python");
 
+    editor.session.setMode("ace/mode/python");
     ace.require("ace/snippets");
     ace.require("ace/ext/language_tools");
-    }
+}
 
 $(window).on('load', function() {
     if (document.getElementById("editor"))
-        setInterval(EditorAutoSize, 150);
+        setInterval(EditorAutoSize, 250);
     if (document.getElementById("loading-screen"))
         setInterval(() => {
             $('#loading-screen').remove();

@@ -62,7 +62,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" type="text/javascript"></script>
     <script>
         
-    var isloaded = false;
+    var PGZero = false;
     $(window).on('load', function() {
         LoadCSS("https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css");
         LoadCSS("http://fonts.googleapis.com/css?family=Roboto");

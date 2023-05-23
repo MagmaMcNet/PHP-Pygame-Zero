@@ -1931,8 +1931,8 @@ _font_cache = {}
 
 FPS = 15
 TITLE = 'UNTITLED'
-display_FPS = 30
-add_Current_FPS = 0
+FPSDisplay = 30
+FPSCount = 0
 WIDTH = 500
 HEIGHT = 300
 
@@ -1953,10 +1953,10 @@ TWEEN_FUNCTIONS = {
 # 
 
 def Update_fps():
-    global add_Current_FPS
-    global display_FPS
-    display_FPS = str(add_Current_FPS)
-    add_Current_FPS = 0
+    global FPSCount
+    global FPSDisplay
+    FPSDisplay = str(FPSCount)
+    FPSCount = 0
 
 class Custom_Modules:
     
@@ -1971,14 +1971,15 @@ class Custom_Modules:
     class Fps_mod:
         def __getattr__(self, keyname):
             
-            global add_Current_FPS
-            global display_FPS
+            global FPSCount
+            global FPSDisplay
             if keyname.upper() == "INIT":
                 clock.schedule_interval(Update_fps, 1)
             elif keyname.upper() == "UPDATE":
-                add_Current_FPS += 1
+                FPSCount += 1
             elif keyname.upper() == "DISPLAY":
-                return display_FPS
+                return FPSDisplay
 #
 FPS_Modules = Custom_Modules.Fps_mod()
+FPS_Module = Custom_Modules.Fps_mod()
 Mouse = Custom_Modules.Mouse()
