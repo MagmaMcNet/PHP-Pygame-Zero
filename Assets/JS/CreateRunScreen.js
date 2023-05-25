@@ -74,11 +74,13 @@ function CreateRunScreen() {
     var GameButton = document.createElement("a");
     $(GameButton).attr("data-toggle", "pill");
     $(GameButton).attr("href", "#game");
+    $(GameTab).attr("id", "gametab");
     $(GameButton).text("Game");
     
     var ConsoleButton = document.createElement("a");
     $(ConsoleButton).attr("data-toggle", "pill");
     $(ConsoleButton).attr("href", "#console");
+    $(ConsoleTab).attr("id", "consoletab");
     $(ConsoleButton).text("Console");
     
     var div9 = document.createElement("div");

@@ -7,7 +7,7 @@
     {
         ?>
         <script>
-            window.location.href = "Projects.php";
+            window.location.href = "Home.php";
         </script>
         <?php
     }
@@ -16,7 +16,7 @@
     {
         ?>
         <script>
-            window.location.href = "Projects.php";
+            window.location.href = "Home.php";
         </script>
         <?php
     }
@@ -53,26 +53,26 @@
 
     <!-- Import -->
 
-    
     <link href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" rel='stylesheet' type='text/css'>
-
+    
     <script src="./Base/Skulpt/skulpt.min.js" type="text/javascript"></script>
     <script src="./Base/Skulpt/skulpt-stdlib.js" type="text/javascript"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" type="text/javascript"></script>
     <script>
         
+
     var PGZero = false;
     $(window).on('load', function() {
         LoadCSS("https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css");
         LoadCSS("http://fonts.googleapis.com/css?family=Roboto");
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-inline_autocomplete.min.js")
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-prompt.min.js")
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-whitespace.min.js")
-        
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-language_tools.min.js")
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-beautify.min.js")
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-code_lens.min.js")
+
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-inline_autocomplete.min.js");
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-prompt.min.js");
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-whitespace.min.js");
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-language_tools.min.js");
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-beautify.min.js");
+        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/ace/1.21.1/ext-code_lens.min.js");
     });
 
     </script>
@@ -117,6 +117,7 @@
             <pre id="output" name="Output" class="text-left" style="background-color: #141414; color:#f8f8f8; border: 0px;"></pre>
             <a class="btn btn-primary" id="runbutton" title="Run">Run code <span class="glyphicon glyphicon-play"></span></a>
         <a class="btn btn-info" id="file" href="Share/?ID=<?php echo $_COOKIE["Project"]; ?>" title="Share">Share <span class="glyphicon glyphicon-share"></span></a>
+        <a class="btn btn-warning" id="file" href="Explorer.php" title="Project File Explorer">File Explorer <span class="glyphicon glyphicon-file"></span></a>
 
         </div>
     </div>
@@ -160,26 +161,43 @@
 
         <?php echo file_get_contents("Assets/JS/CreateRunScreen.js"); ?>
 
-var typingTimer; // Timer identifier
-var doneTypingInterval = 500; // Time in milliseconds (2 seconds)
+var SavingTimer;
+var SavingInterval = 500;
 
-// Event listener for keyup event in the Ace editor
-editor.getSession().on('change', function() {
-    clearTimeout(typingTimer); // Clear the previous timer
-
-    // Set a new timer to save the data after 2 seconds of inactivity
-    typingTimer = setTimeout(saveData, doneTypingInterval);
+editor.getSession().on('change', function() 
+{
+    clearTimeout(SavingTimer);
+    SavingTimer = setTimeout(saveData, SavingInterval);
 });
 
-// Function to save the data
 function saveData() {
     $.ajax({
         type: "GET",
-        url: "SaveData.php?Token=" + Cookies.get("Token") + "&Project=" + UserID + "&Data=" + encodeURIComponent(editor.getValue()),
-        async: true // Set async to true to prevent pausing the Ace editor
+        url: "SaveData.php?Token=" + Cookies.get("Token") + "&Project=" + UserID + "&Data=" + encodeURIComponent(editor.getValue()), // TODO: Upload as A File instead of URL Param
+        async: true
     });
 }
 
+
+function GetCustomModules() {
+    <?php
+        $CustomModulesLength = 0;
+    echo 'return `';
+    try {
+        $folder = "./Share/".$_COOKIE["Project"]."/files/";
+        if (is_dir($folder))
+        {
+            $scanned_directory = array_diff(scandir($folder), array('..', '.'));
+            foreach($scanned_directory as $filename)
+            {
+                echo "\n".file_get_contents($folder.$filename)."\n";
+                $CustomModulesLength += count(file($folder.$filename));
+            }
+        }
+    } catch(Exception) {}
+    echo '`';
+    ?>
+}
 
 function runCode() {
     Console.Clear();
@@ -191,55 +209,71 @@ function runCode() {
         output: Console.Print,
         read: builtinRead
     });
-    Sk.main_canvas = document.createElement("canvas");
     Sk.quitHandler = function() {
         $('.modal').modal('hide');
     };
-    CreateRunScreen();
-    
-    function getcode() {
-        return e;
-        
-    }
-    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'game';
-    
-    function GetCustomModules() {
-        <?php
-            $CustomModulesLength = 0;
-        echo 'return `';
-        try {
-            $folder = "./Share/".$_COOKIE["Project"]."/files/";
-            if (is_dir($folder))
-            {
-                $scanned_directory = array_diff(scandir($folder), array('..', '.'));
-                foreach($scanned_directory as $filename)
-                {
-                    echo "\n".file_get_contents($folder.$filename)."\n";
-                    $CustomModulesLength += count(file($folder.$filename));
-                }
-            }
-        } catch(Exception) {}
-        echo '`';
-        ?>
-    }
 
-    Sk.misceval.asyncToPromise(function() {
-        try {
-            return Sk.importMainWithBody("<stdin>", false, GetPgzeroTop() + GetCustomModules() + editor.getValue() + GetPgzeroBottom(), true);
-        } catch (e) {
-            e.traceback[0].lineno -= (1854 + <?php echo $CustomModulesLength ?>);
-            console.log(e)
-            alert(e)
-            setTimeout(function(){location.reload(true)}, 1000);
+    Sk.misceval.asyncToPromise(function() 
+    {
+        setTimeout(()=>{$('#loading-screen').addClass("loading-done")}, 15000);
+        var Lines = <?php echo $CustomModulesLength ?>;
+        try 
+        {
+            let MainFile = GetCustomModules() + editor.getValue();
+            const pgzero = MainFile.includes("pgzrun.go()");
+            const pygame = MainFile.includes("import pygame") || pgzero;
+            const RequireScreen = pygame || MainFile.includes("import turtle");
+            const a = document.createElement("canvas");
+            Sk.main_canvas = a;
+            a.id = "test";
+            $(Sk.main_canvas ).attr("id", "player");
+            $(Sk.main_canvas ).attr("name", "player");
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'game';
             
+            if (pgzero)
+            {
+                Lines += 1854;
+                MainFile = GetPgzeroTop() + MainFile + GetPgzeroBottom();
+                setTimeout(()=>
+                {
+                    
+                    var PWidth = Sk.main_canvas.width;
+                    var PHeight = Sk.main_canvas.height; 
+                    var Interval = setInterval(function() 
+                    {
+                        var Width = Sk.main_canvas.width;
+                        var Height = Sk.main_canvas.height;  
+                        if (Width !== PWidth || Height !== PHeight) 
+                        {
+                            PWidth = Width;
+                            PHeight = Height;
+                        } else 
+                        {
+                            clearInterval(Interval);
+                            $('#loading-screen').addClass("loading-done");
+                        }
+                    }, 450);
+                }, 100);
+            }
+            else 
+                $('#loading-screen').addClass("loading-done");
 
+            if (RequireScreen)
+                CreateRunScreen();
+
+            
+            return Sk.importMainWithBody("<stdin>", false, MainFile, true);
+        } catch (e) {
+            try {e.traceback[0].lineno -= Lines} catch {}
+            alert(e);
+            location.reload();
         }
     })
-
 }
 
 
 $("#runbutton").click(function() {
+    $('#loading-screen').removeClass("loading-done");
     runCode();
 });
 </script>

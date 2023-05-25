@@ -1,4 +1,3 @@
-*.zip
-!.zip
 /Share/*
 !/Share/*.php
+favicon.ioc

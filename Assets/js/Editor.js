@@ -33,7 +33,6 @@ function builtinRead(x) {
 
 function EditorAutoSize() 
 {
-    
     editor.setOptions({
         enableSnippets: true,
         enableBasicAutocompletion: true,
@@ -46,9 +45,8 @@ function EditorAutoSize()
     document.getElementById("editor").style['margin'] = "0 auto";
     document.getElementById("output").style['height'] = 0.4 * window.innerHeight;
     document.getElementById("output").style['width'] = 0.45 * window.innerWidth;
-
-    
 }
+
 var editor = "";
 if (document.getElementById("editor") !== null)
 {
@@ -64,7 +62,7 @@ $(window).on('load', function() {
     if (document.getElementById("editor"))
         setInterval(EditorAutoSize, 250);
     if (document.getElementById("loading-screen"))
-        setInterval(() => {
-            $('#loading-screen').remove();
-        }, 400);
+        setTimeout(() => {
+            $('#loading-screen').addClass("loading-done")
+        }, 300);
 });

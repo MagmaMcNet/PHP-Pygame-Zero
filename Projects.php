@@ -2,7 +2,7 @@
 
 require_once 'MagmaMc.UAS.PHP/MagmaMc.UAS.php';
 
-UserData->Login("http://".$_SERVER['HTTP_HOST']."/MagmaMc.UAS.PHP/HandleLogin.php");
+UserData->Login("http://".$_SERVER["HTTP_X_FORWARDED_HOST"]."/MagmaMc.UAS.PHP/HandleLogin.php");
 
 ?>
 <!DOCTYPE html>
@@ -49,15 +49,15 @@ UserData->Login("http://".$_SERVER['HTTP_HOST']."/MagmaMc.UAS.PHP/HandleLogin.ph
 <body id="main" style="background: #1c1c1c; color: white; text-align: center;" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
     <script>
-        function CreateProject(prompt){
-            prompt = window.prompt(prompt)
+        function CreateProject(text){
+            prompt = window.prompt(text)
             if (prompt !== null) {
                 if (prompt.length >= 5)
-                    window.parent.location.href = "../CreateProject.php?Project="+b+"&Token="+Cookies.get("Token");
+                    window.parent.location.href = "../CreateProject.php?Project="+prompt+"&Token="+Cookies.get("Token");
 
                 else {
-                    alert("Project Name Needs to be Atleast 5 characters");
-                    CreateProject(prompt)
+                    alert("Project Name Needs to  be Atleast 5 characters");
+                    CreateProject(text)
                 }
             }       
         }
@@ -79,17 +79,21 @@ if ($handle = opendir('Share/')) {
     while (false !== ($entry = readdir($handle))) {
 
         if ($entry != "." && $entry != "..") {
-            if ($entry !== "index.php" and $entry !== "OwnerIDs.db") {
-                $OwnerFile = fopen("./Share/".$entry."/OwnerIDs.db", "c+");
-                $owners = fread($OwnerFile, filesize("./Share/".$entry."/OwnerIDs.db"));
-                fclose($OwnerFile);
-                if (strpos($owners, $_COOKIE["Token"]) !== false) {
-                    $b += 1;
-                    if ($b == 6){
-                        $b = 0;
+
+            if ($entry !== "index.php") {
+                try
+                {
+                    $OwnerFile = fopen("./Share/".$entry."/OwnerIDs.db", "c+");
+                    $owners = fread($OwnerFile, filesize("./Share/".$entry."/OwnerIDs.db"));
+                    fclose($OwnerFile);
+                    if (strpos($owners, $_COOKIE["Token"]) !== false) {
+                        $b += 1;
+                        if ($b == 6){
+                            $b = 0;
+                        }
+                        echo "<button class='btn btn-".$a[$b] ."' onclick='Cookies.set(`Project`, `$entry`);window.location.href =`../?ID=$entry`'>$entry</button></br>";
                     }
-                    echo "<button class='btn btn-".$a[$b] ."' onclick='Cookies.set(`Project`, `$entry`);window.location.href =`../?ID=$entry`'>$entry</button></br>";
-                }
+                } catch(Exception) {}
             }
         }
     }

@@ -36,8 +36,9 @@ fclose($MainFile);
 
 mkdir($Folder."Sounds/", 0777, true);
 mkdir($Folder."files/", 0777, true);
-
-file_put_contents($Folder."OwnerIDs.db", $_REQUEST["Token"]);
+mkdir($Folder."images/", 0777, true);
+file_put_contents($Folder."files/README.txt", "#Place *.py Files in here which will be automaticly included into main.py");
+file_put_contents($Folder."OwnerIDs.db", $_REQUEST["Token"].",\r\n");
 
 ?>
 
